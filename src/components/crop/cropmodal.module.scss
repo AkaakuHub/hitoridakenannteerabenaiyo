@@ -1,0 +1,59 @@
+.root{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal{
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  width: 90%;
+  height: 90%;
+  background-color: white;
+  border-radius: 0 0 10px 10px;
+
+  .crop-container{
+    position: relative;
+    height: 90%;
+    background-color: #f4f7fb;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .crop-area{
+    border: 3px solid #00a0ff;
+  }
+
+  .controls{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    margin-top: 10px;
+    margin-right: 50px;
+    margin-left: 50px;
+  }
+
+  .zoom-range{
+    color: #00a0ff;
+  }
+
+  .buttons{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    margin-right: 90px;
+    margin-bottom: 10px;
+    margin-left: 90px;
+  }
+
+  .close{
+    color: #fff;
+    background-color: gray;
+  }
+
+  .ok{
+    color: #fff;
+    background-color: #00a0ff;
+  }
+}
