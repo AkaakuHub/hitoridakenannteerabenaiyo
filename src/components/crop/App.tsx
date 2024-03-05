@@ -5,6 +5,8 @@ import Cropper, { Area } from "react-easy-crop";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { cropImage } from "./cropUtils";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { Slider } from "@mui/material";
+
 
 import styles from "./style.module.scss";
 
@@ -32,6 +34,8 @@ const ImageUploadingButton: FC<ImageUploadingButtonProps> = ({ value, onChange, 
 };
 
 interface ImageCropperProps {
+  zoom: number;
+  setZoom: (zoom: number) => void;
   open: boolean;
   image: string;
   onComplete: (image: Promise<string>) => void;
@@ -40,6 +44,8 @@ interface ImageCropperProps {
 }
 
 const ImageCropper: FC<ImageCropperProps> = ({
+  zoom,
+  setZoom,
   open,
   image,
   onComplete,
@@ -47,8 +53,9 @@ const ImageCropper: FC<ImageCropperProps> = ({
   ...props
 }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+
+  const maxZoom: number = 10;
 
   return (
     <Dialog open={open} maxWidth="sm" fullWidth>
@@ -59,6 +66,7 @@ const ImageCropper: FC<ImageCropperProps> = ({
             image={image}
             crop={crop}
             zoom={zoom}
+            maxZoom={maxZoom}
             aspect={596 / 777}
             onCropChange={setCrop}
             onCropComplete={(_, croppedAreaPixels) => {
@@ -68,7 +76,18 @@ const ImageCropper: FC<ImageCropperProps> = ({
             {...props}
           />
         </div>
+        <Slider
+          value={zoom}
+          min={1}
+          max={maxZoom}
+          step={0.1}
+          onChange={(event, newValue) => {
+            setZoom(newValue as number);
+            console.log(newValue);
+          }}
+        />
       </DialogContent>
+
       <DialogActions>
         <Button
           color="primary"
@@ -93,10 +112,13 @@ const App: FC<Props> = ({
   const [image, setImage] = useState<ImageListType>([]);
   const [croppedImage, setCroppedImage] = useState<string>("/no-image.png");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [zoom, setZoom] = useState<number>(1);
 
   return (
     <div className={styles["root"]}>
       <ImageCropper
+        zoom={zoom}
+        setZoom={setZoom}
         open={dialogOpen}
         image={image.length > 0 ? image[0].dataURL as string : ''}
         onComplete={(imagePromise) => {
@@ -110,7 +132,7 @@ const App: FC<Props> = ({
         containerStyle={{
           position: "relative",
           width: "100%",
-          height: 300,
+          height: 500,
           background: "#333",
         }}
       />
@@ -120,6 +142,7 @@ const App: FC<Props> = ({
         onChange={(newImage) => {
           setDialogOpen(true);
           setImage(newImage);
+          setZoom(1);
         }}
       />
     </div>

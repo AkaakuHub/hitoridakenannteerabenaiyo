@@ -165,6 +165,7 @@ export default function Page() {
           <Card sx={{
             minWidth: 275,
             maxWidth: 600,
+            maxHeight: 410,
             borderRadius: 5,
           }}>
             <div
@@ -284,6 +285,7 @@ export default function Page() {
           <Card sx={{
             minWidth: 275,
             maxWidth: 600,
+            maxHeight: 510,
             borderRadius: 5,
           }}>
             <div className={styles["result-container"]}
@@ -316,7 +318,6 @@ export default function Page() {
                     }).catch((error) => {
                       console.log("Sharing failed", error);
                     });
-
                   }}
                 >
                   <IosShareIcon />
@@ -326,6 +327,12 @@ export default function Page() {
             </div>
           </Card>
         </div >
+      </div>
+      <div className={styles["footer-container"]}
+      >
+        <Footer
+          themeName={themeName}
+        />
       </div>
     </>
   );
