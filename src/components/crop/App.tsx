@@ -1,21 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
-
-import ImageUploading from "react-images-uploading";
-
-import Cropper from "react-easy-crop";
-
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
-
+import React, { useState, FC } from "react";
+import ImageUploading, { ImageListType, ImageType } from "react-images-uploading";
+import Cropper, { Area } from "react-easy-crop";
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { cropImage } from "./cropUtils";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
-const ImageUploadingButton = ({ value, onChange, ...props }) => {
+import styles from "./style.module.scss";
+
+interface ImageUploadingButtonProps {
+  value: ImageListType;
+  onChange: (image: ImageListType) => void;
+  [x: string]: any;
+}
+
+const ImageUploadingButton: FC<ImageUploadingButtonProps> = ({ value, onChange, ...props }) => {
   return (
     <ImageUploading value={value} onChange={onChange}>
       {({ onImageUpload, onImageUpdate }) => (
@@ -24,14 +23,23 @@ const ImageUploadingButton = ({ value, onChange, ...props }) => {
           onClick={value ? onImageUpload : () => onImageUpdate(0)}
           {...props}
         >
-          Uploadする。
+          <FileUploadIcon />
+          画像を選択
         </Button>
       )}
     </ImageUploading>
   );
 };
 
-const ImageCropper = ({
+interface ImageCropperProps {
+  open: boolean;
+  image: string;
+  onComplete: (image: Promise<string>) => void;
+  containerStyle: React.CSSProperties;
+  [x: string]: any;
+}
+
+const ImageCropper: FC<ImageCropperProps> = ({
   open,
   image,
   onComplete,
@@ -40,12 +48,11 @@ const ImageCropper = ({
 }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   return (
     <Dialog open={open} maxWidth="sm" fullWidth>
-      <DialogTitle>Crop Image</DialogTitle>
-
+      <DialogTitle>画像をクロップ</DialogTitle>
       <DialogContent>
         <div style={containerStyle}>
           <Cropper
@@ -62,46 +69,39 @@ const ImageCropper = ({
           />
         </div>
       </DialogContent>
-
       <DialogActions>
         <Button
           color="primary"
           onClick={() =>
-            onComplete(cropImage(image, croppedAreaPixels, console.log))
+            onComplete(cropImage(image, croppedAreaPixels ?? {}, console.log))
           }
         >
-          Finish
+          決定
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-type Props = {
+interface Props {
   setFaceImageBase64: (image: string) => void;
 };
 
-const App: React.FC<Props> = ({
+const App: FC<Props> = ({
   setFaceImageBase64,
 }) => {
-  const [image, setImage] = useState([]);
-  const [croppedImage, setCroppedImage] = useState<string>(null);
+  const [image, setImage] = useState<ImageListType>([]);
+  const [croppedImage, setCroppedImage] = useState<string>("/no-image.png");
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <div className="App">
-      <ImageUploadingButton
-        value={image}
-        onChange={(newImage) => {
-          setDialogOpen(true);
-          setImage(newImage);
-        }}
-      />
+    <div className={styles["root"]}>
       <ImageCropper
         open={dialogOpen}
-        image={image.length > 0 && image[0].dataURL}
-        onComplete={(imagePromisse) => {
-          imagePromisse.then((image) => {
+        image={image.length > 0 ? image[0].dataURL as string : ''}
+        onComplete={(imagePromise) => {
+          imagePromise.then((image) => {
+            if (image === null || image === '') return;
             setCroppedImage(image); // base64で入ってる、ラッキー
             setFaceImageBase64(image);
             setDialogOpen(false);
@@ -114,7 +114,14 @@ const App: React.FC<Props> = ({
           background: "#333",
         }}
       />
-      {croppedImage && <img src={croppedImage} alt="blab" />}
+      <img src={croppedImage} alt="Cropped image" className={styles["cropped-image"]} />
+      <ImageUploadingButton
+        value={image}
+        onChange={(newImage) => {
+          setDialogOpen(true);
+          setImage(newImage);
+        }}
+      />
     </div>
   );
 }

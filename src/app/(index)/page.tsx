@@ -19,7 +19,9 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import DownloadIcon from '@mui/icons-material/Download';
+import IosShareIcon from '@mui/icons-material/IosShare';
 
 import Header from '@/components/header/header';
 import Footer from "@/components/footer/footer";
@@ -33,6 +35,8 @@ import clsx from 'clsx';
 
 // import { SelectPicture } from '@/components/SelectPicture';
 import CropApp from '@/components/crop/App';
+
+import CollapseComponent from '@/components/collapse/Collapse';
 
 const fontList: string[] = [
   "azuki",
@@ -67,7 +71,7 @@ export default function Page() {
 
   const [faceImageBase64, setFaceImageBase64] = useState<string>("");
 
-  const [resultImageUrl, setResultImageUrl] = useState<string | null>(null);
+  const [resultImageUrl, setResultImageUrl] = useState<string>("/card.png");
 
   const [fontName, setFontName] = useState<string>(fontList[0]);
 
@@ -124,6 +128,13 @@ export default function Page() {
     changeThemeColor();
   }, []);
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [draweCollapse, setDraweCollapse] = useState(false);
+
+  const handleClick = () => {
+    setDraweCollapse(c => !c);
+  };
+
   return (
     <>
       <GlobalStyle />
@@ -149,209 +160,172 @@ export default function Page() {
             虹ヶ咲学園の学生証&quot;風&quot;の画像を生成します。
           </div>
         </Card>
-        <Card sx={{
-          minWidth: 275,
-          maxWidth: 600,
-          borderRadius: 5,
-        }}>
-          <div
-            className={styles["card-title"]}
-          >
-            1.アイコンを選択
-          </div>
-          <CropApp
-            setFaceImageBase64={setFaceImageBase64}
-          />
-        </Card>
-        <Card sx={{
-          minWidth: 300,
-          maxWidth: 1000,
-          borderRadius: 5,
-        }}>
-          <div
-            className={styles["card-title"]}
-          >
-            2.情報を入力
-          </div>
-          <div
-            className={styles["input-container"]}
-          >
-            <CardContent>
-              <div className={styles["select-container"]}
-              >
-                <span>学科:</span>
-                <Input
-                  type="text"
-                  placeholder="所属を入力"
-                  value={queryData.department}
-                  onChange={(e) => {
-                    const newQueryData = { ...queryData, "department": e.target.value };
-                    setQueryData(newQueryData);
-                  }}
-                />
-              </div>
-              <br />
-              <div className={styles["select-container"]}
-              >
-                <span>名前:</span>
-                <Input
-                  type="text"
-                  placeholder="名前を入力"
-                  value={queryData.name}
-                  onChange={(e) => {
-                    const newQueryData = { ...queryData, "name": e.target.value };
-                    setQueryData(newQueryData);
-                  }}
-                />
-              </div>
-              <br />
-              <div className={styles["select-container"]}
-              >
-                <span>所属:</span>
-                <Input
-                  type="text"
-                  placeholder="所属を入力"
-                  value={queryData.affiliation}
-                  onChange={(e) => {
-                    const newQueryData = { ...queryData, "affiliation": e.target.value };
-                    setQueryData(newQueryData);
-                  }}
-                />
-              </div>
-              <br />
+        <div className={styles["workspace-container"]}
+        >
+          <Card sx={{
+            minWidth: 275,
+            maxWidth: 600,
+            borderRadius: 5,
+          }}>
+            <div
+              className={styles["card-title"]}
+            >
+              1.アイコンを選択
+            </div>
+            <CropApp
+              setFaceImageBase64={setFaceImageBase64}
+            />
+          </Card>
+          <Card sx={{
+            minWidth: 300,
+            maxWidth: 1000,
+            borderRadius: 5,
+          }}>
+            <div
+              className={styles["card-title"]}
+            >
+              2.情報を入力
+            </div>
+            <div
+              className={styles["input-container"]}
+            >
+              <CardContent>
+                <div className={styles["select-container"]}
+                >
+                  <span>学科:</span>
+                  <Input
+                    type="text"
+                    placeholder="所属を入力"
+                    value={queryData.department}
+                    onChange={(e) => {
+                      const newQueryData = { ...queryData, "department": e.target.value };
+                      setQueryData(newQueryData);
+                    }}
+                  />
+                </div>
+                <br />
+                <div className={styles["select-container"]}
+                >
+                  <span>名前:</span>
+                  <Input
+                    type="text"
+                    placeholder="名前を入力"
+                    value={queryData.name}
+                    onChange={(e) => {
+                      const newQueryData = { ...queryData, "name": e.target.value };
+                      setQueryData(newQueryData);
+                    }}
+                  />
+                </div>
+                <br />
+                <div className={styles["select-container"]}
+                >
+                  <span>所属:</span>
+                  <Input
+                    type="text"
+                    placeholder="所属を入力"
+                    value={queryData.affiliation}
+                    onChange={(e) => {
+                      const newQueryData = { ...queryData, "affiliation": e.target.value };
+                      setQueryData(newQueryData);
+                    }}
+                  />
+                </div>
+                <br />
+                <div className={styles["collapse-container"]}
+                >
+                  <CollapseComponent
+                    offsetData={offsetData}
+                    setOffsetData={setOffsetData}
+                  />
+                </div>
 
+                所属のフォントを選択:
+                <Select
+                  value={fontName}
+                  onChange={(e) => setFontName(e.target.value)}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Without label' }}
+                >
+                  {fontList.map((font, index) => (
+                    <MenuItem key={index} value={font}>
+                      <img src={`/font-preview/${font}.png`} alt={font} width="200" height="50"
+                        className={styles["font-preview"]}
+                      />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </CardContent>
               {
                 faceImageBase64 === "" && (
-                  <div>アイコン画像を選択してください。</div>
+                  <div>まず、アイコン画像を選択してください。</div>
                 )
               }
-
-              {/** offsetを設定 */}
-              <div className={styles["select-container"]}
-              >
-                <span>サイズ:</span>
-                <Input
-                  type="number"
-                  placeholder="サイズを入力"
-                  value={offsetData.size}
-                  onChange={(e) => {
-                    const newOffsetData = { ...offsetData, "size": Number(e.target.value) };
-                    setOffsetData(newOffsetData);
-                  }}
-                />
-              </div>
-              <br />
-              <div className={styles["select-container"]}
-              >
-                <span>横位置:</span>
-                <Input
-                  type="number"
-                  placeholder="横位置を入力"
-                  value={offsetData.x}
-                  onChange={(e) => {
-                    const newOffsetData = { ...offsetData, "x": Number(e.target.value) };
-                    setOffsetData(newOffsetData);
-                  }}
-                />
-              </div>
-              <br />
-              <div className={styles["select-container"]}
-              >
-                <span>縦位置:</span>
-                <Input
-                  type="number"
-                  placeholder="縦位置を入力"
-                  value={offsetData.y}
-                  onChange={(e) => {
-                    const newOffsetData = { ...offsetData, "y": Number(e.target.value) };
-                    setOffsetData(newOffsetData);
-                  }}
-                />
-              </div>
-              <br />
-              <div className={styles["select-container"]}
-              >
-                <span>文字間隔:</span>
-                <Input
-                  type="number"
-                  placeholder="文字間隔を入力"
-                  value={offsetData.spacing}
-                  onChange={(e) => {
-                    const newOffsetData = { ...offsetData, "spacing": Number(e.target.value) };
-                    setOffsetData(newOffsetData);
-                  }}
-                />
-              </div>
-              <br />
-
-              所属のフォントを選択:
-              <Select
-                value={fontName}
-                onChange={(e) => setFontName(e.target.value)}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
-              >
-                {fontList.map((font, index) => (
-                  <MenuItem key={index} value={font}>
-                    <img src={`/font-preview/${font}.png`} alt={font} width="200" height="50"
-                      className={styles["font-preview"]}
-                    />
-                  </MenuItem>
-                ))}
-              </Select>
-            </CardContent>
-            <CardActions>
-              <div
-                className={styles["button-container"]}
-              >
-                <Button onClick={() => fetchData()}
-                  disabled={faceImageBase64 === "" || isFetching}
-                  variant='contained'
-                  size='large'
-                >画像を作成</Button>
-                {isFetching ?
-                  <Box sx={{ display: 'flex' }} className={styles["loading-icon-container"]}
+              <CardActions>
+                <div
+                  className={styles["button-container"]}
+                >
+                  <Button onClick={() => fetchData()}
+                    disabled={faceImageBase64 === "" || isFetching}
+                    variant='contained'
+                    size='large'
                   >
-                    <CircularProgress />
-                  </Box> : null}
-              </div>
-            </CardActions>
-          </div>
-        </Card>
-        <Card sx={{
-          minWidth: 275,
-          maxWidth: 600,
-          borderRadius: 5,
-        }}>
-          <div className={styles["result-container"]}
-          >
-            {resultImageUrl ? (
-              <>
-                <img src={resultImageUrl} alt="Generated Image"
-                  className={clsx(styles["generated-image"], isFetching && styles["image-dark"])}
-                />
-                <a href={resultImageUrl} download="nijigasaki_card.png">
+                    <PlayArrowIcon />
+                    画像を作成</Button>
+                  {isFetching ?
+                    <Box sx={{ display: 'flex' }} className={styles["loading-icon-container"]}
+                    >
+                      <CircularProgress />
+                    </Box> : null}
+                </div>
+              </CardActions>
+            </div>
+          </Card>
+          <Card sx={{
+            minWidth: 275,
+            maxWidth: 600,
+            borderRadius: 5,
+          }}>
+            <div className={styles["result-container"]}
+            >
+              <img src={resultImageUrl} alt="Generated Image"
+                className={clsx(styles["generated-image"], isFetching && styles["image-dark"])}
+              />
+              <div className={styles["result-button-container"]}
+              >
+                <a href={isFetching || resultImageUrl === "/card.png" ? undefined : resultImageUrl} download="nijigasaki_card.png">
                   <Button variant="contained" color='success'
+                    disabled={isFetching || resultImageUrl === "/card.png"}
                   >
                     <DownloadIcon />
-                    画像をダウンロード</Button>
+                    画像をダウンロード
+                  </Button>
                 </a>
-              </>
-            ) : (
-              <div
-                className={styles["dummy-result-image"]}
-              >
+                <Button variant="contained" color='info'
+                  disabled={isFetching || resultImageUrl === "/card.png"}
+                  onClick={async () => {
+                    const text: string = "虹ヶ咲学園 学生証ジェネレーターで作成した画像です。"
+                    const response = await fetch(resultImageUrl);
+                    const blob = await response.blob();
+                    const file = new File([blob], "nijigasaki_card.png", { type: "image/png" });
+                    navigator.share({
+                      text: decodeURI(text),
+                      files: [file]
+                    }).then(() => {
+                      console.log("Share was successful.");
+                    }).catch((error) => {
+                      console.log("Sharing failed", error);
+                    });
+
+                  }}
+                >
+                  <IosShareIcon />
+                  画像を共有
+                </Button>
               </div>
-            )
-            }
-          </div>
-        </Card>
-      </div >
-      <div className={styles["footer-container"]}
-      >
-        <Footer
-          themeName={themeName}
-        />
+            </div>
+          </Card>
+        </div >
       </div>
     </>
   );

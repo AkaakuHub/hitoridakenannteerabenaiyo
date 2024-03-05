@@ -1,4 +1,11 @@
-const createImage = (url) =>
+type PixelCrop = {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+};
+
+const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener("load", () => resolve(image));
@@ -7,11 +14,12 @@ const createImage = (url) =>
     image.src = url;
   });
 
-// Copy from "https://codesandbox.io/s/react-easy-crop-demo-with-cropped-output-q8q1mnr01w?from-embed=&file=/src/cropImage.js:0-2289"
-async function getCroppedImg(imageSrc, pixelCrop) {
+async function getCroppedImg(imageSrc: string, pixelCrop: PixelCrop): Promise<string> {
   const image = await createImage(imageSrc);
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
+
+  if (!ctx) throw new Error("Unable to create 2d context");
 
   const maxSize = Math.max(image.width, image.height);
   const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2));
@@ -38,11 +46,11 @@ async function getCroppedImg(imageSrc, pixelCrop) {
   return canvas.toDataURL("image/jpeg");
 }
 
-export const cropImage = async (image, croppedAreaPixels, onError) => {
+export const cropImage = async (image: string, croppedAreaPixels: PixelCrop, onError: (error: Error) => void): Promise<string | undefined> => {
   try {
     const croppedImage = await getCroppedImg(image, croppedAreaPixels);
     return croppedImage;
   } catch (err) {
-    onError(err);
+    onError(err as Error); // Explicitly type 'err' as 'Error'
   }
 };

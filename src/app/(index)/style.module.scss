@@ -2,12 +2,19 @@
 
 .root{
   display: flex;
+  flex-direction: column;
+  gap: 50px;
+  align-items: center;
+  padding: 20px;
+}
+
+.workspace-container{
+  display: flex;
   flex-flow: row wrap;
   gap: 3em;
   gap: 50px;
   justify-content: space-around;
   min-height: 100%;
-  padding: 20px;
 }
 
 .generated-image{
@@ -84,4 +91,15 @@
   padding-top: 0.5em;
   padding-left: 1em;
   font-size: 1.5em;
+}
+
+.collapse-container{
+  margin-top: 1em;
+  margin-bottom: 2em;
+}
+
+.result-button-container{
+  display: flex;
+  gap: 1em;
+  margin-top: 1em;
 }
