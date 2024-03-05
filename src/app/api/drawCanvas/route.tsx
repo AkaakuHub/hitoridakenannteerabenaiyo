@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     // ttfまたはotfにしたいからdatに戻すかも
 
-    const fontArrayBuffer1Path = path.join(process.cwd(), "public/Zen Old Mincho900.dat");
+    const fontArrayBuffer1Path = path.join(process.cwd(), "src/assets/fonts/Zen Old Mincho900.dat");
     try {
       const result = fs.readFileSync(fontArrayBuffer1Path);
       fontArrayBuffer1 = result.buffer;
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         weight: 900,
       });
     }
-    const fontArrayBuffer2Path = path.join(process.cwd(), "public/Zen Old Mincho500.dat");
+    const fontArrayBuffer2Path = path.join(process.cwd(), "src/assets/fonts/Zen Old Mincho500.dat");
     try {
       const result = fs.readFileSync(fontArrayBuffer2Path);
       fontArrayBuffer2 = result.buffer;
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const fontArrayBuffer3Path = path.join(process.cwd(), `public/${fontName}.dat`);
+    const fontArrayBuffer3Path = path.join(process.cwd(), `src/assets/fonts/${fontName}.dat`);
     try {
       const result = fs.readFileSync(fontArrayBuffer3Path);
       fontArrayBuffer3 = result.buffer;
@@ -118,7 +118,7 @@ export async function POST(req: NextRequest) {
             fontSize: `${80 + offsetData.size}px`,
             position: 'absolute',
             color: '#000',
-            top: `${810 + offsetData.y}px`,
+            top: `${840 + offsetData.y}px`,
             left: `${370 + offsetData.x}px`,
             letterSpacing: `${-5 + offsetData.spacing}px`,
           }}
