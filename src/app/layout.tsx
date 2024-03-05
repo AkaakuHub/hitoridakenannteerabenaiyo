@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
-import { M_PLUS_1p } from "next/font/google";
 import "./globals.css";
 
-const m_plus = M_PLUS_1p({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--m-plus-1p",
-});
 
 export const metadata: Metadata = {
   title: "虹ヶ咲学園 学生証ジェネレーター",
@@ -20,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${m_plus.variable}`}>
+      <body>
         {children}
       </body>
     </html>

@@ -2,6 +2,8 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import GlobalStyle from "@/lib/GlobalStyle";
+
 import { useEffect, useState } from 'react';
 import { Input, Button } from '@mui/material';
 
@@ -11,6 +13,7 @@ import Select from '@mui/material/Select';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 
 import CircularProgress from '@mui/material/CircularProgress';
@@ -102,12 +105,6 @@ export default function Page() {
     setIsFetching(false);
   }
 
-  // const selectBox = [
-  //   { label: "label1", value: "value1" },
-  //   { label: "label2", value: "value2" },
-  //   { label: "label3", value: "value3" }
-  // ];
-
   const [themeColors, setThemeColors] = useState<string[]>(["", ""]);
   const [themeName, setThemeName] = useState<string>("");
 
@@ -129,6 +126,7 @@ export default function Page() {
 
   return (
     <>
+      <GlobalStyle />
       <Header
         themeColor={themeColors[1]}
         changeThemeColor={changeThemeColor}
@@ -152,10 +150,29 @@ export default function Page() {
           </div>
         </Card>
         <Card sx={{
+          minWidth: 275,
+          maxWidth: 600,
+          borderRadius: 5,
+        }}>
+          <div
+            className={styles["card-title"]}
+          >
+            1.アイコンを選択
+          </div>
+          <CropPage
+            setFaceImageBase64={setFaceImageBase64}
+          />
+        </Card>
+        <Card sx={{
           minWidth: 300,
           maxWidth: 1000,
           borderRadius: 5,
         }}>
+          <div
+            className={styles["card-title"]}
+          >
+            2.情報を入力
+          </div>
           <div
             className={styles["input-container"]}
           >
@@ -306,30 +323,29 @@ export default function Page() {
           maxWidth: 600,
           borderRadius: 5,
         }}>
-          <CropPage
-            setFaceImageBase64={setFaceImageBase64}
-          />
+          <div className={styles["result-container"]}
+          >
+            {resultImageUrl ? (
+              <>
+                <img src={resultImageUrl} alt="Generated Image"
+                  className={clsx(styles["generated-image"], isFetching && styles["image-dark"])}
+                />
+                <a href={resultImageUrl} download="nijigasaki_card.png">
+                  <Button variant="contained" color='success'
+                  >
+                    <DownloadIcon />
+                    画像をダウンロード</Button>
+                </a>
+              </>
+            ) : (
+              <div
+                className={styles["dummy-result-image"]}
+              >
+              </div>
+            )
+            }
+          </div>
         </Card>
-        {resultImageUrl && (
-          <Card sx={{
-            minWidth: 275,
-            maxWidth: 600,
-            borderRadius: 5,
-          }}>
-            <div className={styles["result-container"]}
-            >
-              <img src={resultImageUrl} alt="Generated Image"
-                className={clsx(styles["generated-image"], isFetching && styles["image-dark"])}
-              />
-              <a href={resultImageUrl} download="nijigasaki_card.png">
-                <Button variant="contained" color='success'
-                >
-                  <DownloadIcon />
-                  画像をダウンロード</Button>
-              </a>
-            </div>
-          </Card>
-        )}
       </div >
       <div className={styles["footer-container"]}
       >

@@ -8,6 +8,7 @@ body{
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: var(--m-plus-1p);
+
+  /* font-family: var(--m-plus-1p); */
   font-size: 17px;
 }

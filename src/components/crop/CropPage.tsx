@@ -64,21 +64,16 @@ const CropPage: React.FC<Props> = ({
    */
   const onMediaLoaded = useCallback((mediaSize: MediaSize) => {
     const { width, height } = mediaSize;
-    console.log(width, height);
     const mediaAspectRadio = width / height;
-    console.log(mediaAspectRadio, ASPECT_RATIO);
     if (mediaAspectRadio > ASPECT_RATIO) {
       // 縦幅に合わせてZoomを指定
-      // const result = CROP_WIDTH / ASPECT_RATIO / height;
-      const result = 1;
-      console.log(result);
+      const result = CROP_WIDTH / ASPECT_RATIO / height;
       setZoom(result);
       setMinZoom(result);
       return;
     }
     // 横幅に合わせてZoomを指定
     const result = CROP_WIDTH / width;
-    console.log(result);
     setZoom(result);
     setMinZoom(result);
   }, []);
@@ -127,7 +122,12 @@ const CropPage: React.FC<Props> = ({
 
   return (
     <div className={styles["root"]}>
-      <div className={styles["img-container"]}>
+      <div className={styles["img-container"]}
+        style={{
+          width: `${CROP_WIDTH}px`,
+          height: `${CROP_WIDTH / ASPECT_RATIO}px`
+        }}
+      >
         {croppedImgSrc ? (
           <img src={croppedImgSrc} alt="Cropped" className={styles["img"]} />
         ) : (

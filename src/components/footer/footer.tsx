@@ -4,6 +4,8 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+import GlobalStyle from "@/lib/GlobalStyle";
+
 type Props = {
   themeName: string;
 };
@@ -13,6 +15,7 @@ const Footer: React.FC<Props> = ({
 }) => {
   return (
     <>
+      <GlobalStyle />
       <AppBar component="footer" position="static" sx={{ backgroundColor: '#000000' }}
         style={{
           height: 'auto',
@@ -23,10 +26,14 @@ const Footer: React.FC<Props> = ({
       >
         <Container maxWidth="md">
           <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="caption">
+            <Typography variant="caption"
+              style={{
+                fontFamily: '"M PLUS Rounded 1c"!important',
+              }}
+            >
               ※本サイトはファンメイドであり、公式とは一切関係ありません。
               <br />
-              現在{themeName}のテーマで表示しています。
+              現在{themeName}のテーマカラーで表示しています。
               <br />
               ヘッダーをクリックしてみてね！
             </Typography>

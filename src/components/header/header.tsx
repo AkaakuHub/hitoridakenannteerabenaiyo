@@ -1,4 +1,5 @@
 "use client";
+import GlobalStyle from "@/lib/GlobalStyle";
 
 import react from 'react';
 import { useEffect, useState } from 'react';
@@ -20,28 +21,35 @@ const Header: React.FC<Props> = ({
 }) => {
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static"
-        sx={{
-          bgcolor: themeColor
-        }}
-        onClick={() => {
-          changeThemeColor();
-        }}
-        style={{
-          color: "black",
-          userSelect: "none",
-          cursor: "pointer"
-        }}
-      >
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}
-          >
-            虹ヶ咲学園 学生証ジェネレーター
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <><GlobalStyle />
+      <Box sx={{ flexGrow: 1 }}>
+
+        <AppBar position="static"
+          sx={{
+            bgcolor: themeColor
+          }}
+          onClick={() => {
+            changeThemeColor();
+          }}
+          style={{
+            color: "black",
+            userSelect: "none",
+            cursor: "pointer"
+          }}
+        >
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}
+              style={{
+                fontFamily: '"M PLUS Rounded 1c"!important',
+              }}
+            >
+              虹ヶ咲学園 学生証ジェネレーター
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </>
+
   );
 }
 

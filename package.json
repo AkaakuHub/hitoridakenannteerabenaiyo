@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
+    "@fontsource/m-plus-rounded-1c": "^5.0.12",
     "@mui/icons-material": "^5.15.11",
     "@mui/material": "^5.15.11",
     "bootstrap": "^5.3.3",
@@ -22,6 +23,7 @@
     "react-easy-crop": "^5.0.5",
     "react-image-crop": "^11.0.5",
     "sass": "^1.71.1",
+    "styled-components": "^6.1.8",
     "stylistic": "^0.2.4"
   },
   "devDependencies": {
