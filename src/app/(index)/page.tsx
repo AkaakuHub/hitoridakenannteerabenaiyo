@@ -32,7 +32,7 @@ import styles from './style.module.scss';
 import clsx from 'clsx';
 
 // import { SelectPicture } from '@/components/SelectPicture';
-import CropPage from '@/components/crop/CropPage';
+import CropApp from '@/components/crop/App';
 
 const fontList: string[] = [
   "azuki",
@@ -159,7 +159,7 @@ export default function Page() {
           >
             1.アイコンを選択
           </div>
-          <CropPage
+          <CropApp
             setFaceImageBase64={setFaceImageBase64}
           />
         </Card>
