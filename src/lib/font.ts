@@ -10,7 +10,7 @@
  */
 const fs = require("fs");
 
-let fontCache: { [key: string]: ArrayBuffer } = {};
+// let fontCache: { [key: string]: ArrayBuffer } = {};
 
 export async function loadGoogleFont({
   family,
@@ -21,11 +21,11 @@ export async function loadGoogleFont({
   weight?: number;
   text?: string;
 }) {
-  const cacheKey = `${family}-${weight}-${text}`;
-  if (fontCache[cacheKey]) {
-    console.log('Font loaded from cache');
-      return fontCache[cacheKey];
-  }
+  // const cacheKey = `${family}-${weight}-${text}`;
+  // if (fontCache[cacheKey]) {
+  //   console.log('Font loaded from cache');
+  //     return fontCache[cacheKey];
+  // }
   console.log('Font will be loaded from Google Fonts');
 
   const params = new URLSearchParams({
@@ -51,14 +51,16 @@ export async function loadGoogleFont({
 
   const fontArrayBuffer = await fetch(fontUrl).then((res) => res.arrayBuffer());
 
-  fontCache[cacheKey] = fontArrayBuffer;
+  // fontCache[cacheKey] = fontArrayBuffer;
 
   // 今、一回だけ{font名}.arrayBufferというファイルを作成して保存する
-  // fs.writeFileSync(`./${family}${weight ? weight : ''}.dat`, Buffer.from(fontArrayBuffer), err => {
+  // console.log("保存します。");
+  // fs.writeFileSync(`./public/${family}${weight ? weight : ''}.ttf`, Buffer.from(fontArrayBuffer), err => {
   //   if (err) {
   //     console.error(err);
   //     return;
   //   }
+  //   console.log('Font file saved', `./${family}${weight ? weight : ''}.ttf`);
   // });
 
   return fontArrayBuffer;

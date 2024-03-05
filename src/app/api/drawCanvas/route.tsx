@@ -8,19 +8,29 @@ import { NextRequest } from "next/server";
 
 import { loadGoogleFont } from '@/lib/font';
 
+import { queryType, offsetType } from '@/types';
+
 export async function POST(req: NextRequest) {
   try {
     const requestBody = await req.json();
-    const department: string = requestBody.department;
-    const name: string = requestBody.name;
-    const affiliation: string = requestBody.affiliation;
+
+    const queryData: queryType = requestBody.queryData;
     const faceImageBase64: string = requestBody.faceImageBase64;
-    console.log(department, name, affiliation, faceImageBase64.length);
+    const fontName: string = requestBody.fontName;
+    const offsetData: offsetType = requestBody.offsetData;
+    // console.log(department, name, affiliation, faceImageBase64.length);
+
+    const department = queryData.department;
+    const name = queryData.name;
+    const affiliation = queryData.affiliation;
 
     // まずは、フォントをローカル優先で読み込む
     // memo: vercelだとfsで書き込めないからあらかじめ選択肢を用意する必要がある
     let fontArrayBuffer1: ArrayBuffer;
     let fontArrayBuffer2: ArrayBuffer;
+    let fontArrayBuffer3: ArrayBuffer;
+
+    // ttfまたはotfにしたいからdatに戻すかも
 
     const fontArrayBuffer1Path = path.join(process.cwd(), "public/Zen Old Mincho900.dat");
     try {
@@ -44,6 +54,25 @@ export async function POST(req: NextRequest) {
         weight: 500,
       });
     }
+
+    const fontArrayBuffer3Path = path.join(process.cwd(), `public/${fontName}.dat`);
+    try {
+      const result = fs.readFileSync(fontArrayBuffer3Path);
+      fontArrayBuffer3 = result.buffer;
+    } catch (error: any) {
+      console.error('Error:', error);
+      fontArrayBuffer3 = await loadGoogleFont({
+        family: fontName,
+        weight: 400,
+      });
+    }
+
+    // 保存するときはこれ使う
+
+    // const fontArrayBuffer3 = await loadGoogleFont({
+    //   family: 'Cherry Bomb One',
+    //   weight: 400,
+    // });
 
     // ./card.pngをarrayBufferに変換して読み込む
     const cardImagePath = path.join(process.cwd(), "public/card.png");
@@ -85,13 +114,13 @@ export async function POST(req: NextRequest) {
         </div>
         <div
           style={{// affiliationだけはstyleもカスタム可能
-            fontFamily: 'ZenOldMincho500',
-            fontSize: '80px',
+            fontFamily: 'CustomFont',
+            fontSize: `${80 + offsetData.size}px`,
             position: 'absolute',
             color: '#000',
-            top: '810px',
-            left: '370px',
-            letterSpacing: '-5px',
+            top: `${810 + offsetData.y}px`,
+            left: `${370 + offsetData.x}px`,
+            letterSpacing: `${-5 + offsetData.spacing}px`,
           }}
         >
           {affiliation}
@@ -120,6 +149,12 @@ export async function POST(req: NextRequest) {
             data: fontArrayBuffer2,
             style: 'normal',
             weight: 500,
+          },
+          {
+            name: 'CustomFont',// 所属
+            data: fontArrayBuffer3,
+            style: 'normal',
+            weight: 400,
           },
         ]
       }

@@ -4,7 +4,9 @@
 
 import { useEffect, useState } from 'react';
 import { Input, Button } from '@mui/material';
-import { TextField, MenuItem } from "@mui/material";
+
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -21,26 +23,54 @@ import Footer from "@/components/footer/footer";
 
 import 'react-image-crop/dist/ReactCrop.css'
 
-import { queryType } from '@/types';
+import { queryType, offsetType } from '@/types';
 
 import styles from './style.module.scss';
+import clsx from 'clsx';
 
 // import { SelectPicture } from '@/components/SelectPicture';
 import CropPage from '@/components/crop/CropPage';
+
+const fontList: string[] = [
+  "azuki",
+  "Zen Old Mincho500",
+  "Zen Old Mincho900",
+  "Zen Kurenaido400",
+  "Zen Kaku Gothic New400",
+  "f_feltpen04",
+  "sayonara",
+  "Cherry Bomb One400",
+  "Slackside One400",// 以下英語
+  "Walter Turncoat400",
+  "Pinyon Script400",
+  "Pacifico400",
+];
 
 export default function Page() {
   const [queryData, setQueryData] = useState<queryType>({
     "department": "普通科",
     "name": "",
-    "affiliation": "スクールアイドル同好会"
+    "affiliation": "スクールアイドル同好会",
+    "faceImageBase64": "",
+    "fontName": "",
   });
+
+  const [offsetData, setOffsetData] = useState<offsetType>({
+    "x": 0,
+    "y": 0,
+    "spacing": 0,
+    "size": 0,
+  })
+
   const [faceImageBase64, setFaceImageBase64] = useState<string>("");
 
   const [resultImageUrl, setResultImageUrl] = useState<string | null>(null);
 
+  const [fontName, setFontName] = useState<string>(fontList[0]);
+
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const fetchData = async (input: queryType) => {
+  const fetchData = async () => {
     setIsFetching(true);
     const response = await fetch('/api/drawCanvas', {
       method: 'POST',
@@ -48,10 +78,10 @@ export default function Page() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        department: input.department,
-        name: input.name,
-        affiliation: input.affiliation,
-        faceImageBase64: faceImageBase64
+        queryData: queryData,
+        faceImageBase64: faceImageBase64,
+        fontName: fontName,
+        offsetData: offsetData,
       }),
     });
 
@@ -112,7 +142,7 @@ export default function Page() {
         <Card sx={{
           minWidth: 275,
           maxWidth: 600,
-          maxHeight: "4em",
+          maxHeight: "6em",
           borderRadius: 5,
         }}>
           <div
@@ -178,12 +208,86 @@ export default function Page() {
                   <div>アイコン画像を選択してください。</div>
                 )
               }
+
+              {/** offsetを設定 */}
+              <div className={styles["select-container"]}
+              >
+                <span>サイズ:</span>
+                <Input
+                  type="number"
+                  placeholder="サイズを入力"
+                  value={offsetData.size}
+                  onChange={(e) => {
+                    const newOffsetData = { ...offsetData, "size": Number(e.target.value) };
+                    setOffsetData(newOffsetData);
+                  }}
+                />
+              </div>
+              <br />
+              <div className={styles["select-container"]}
+              >
+                <span>横位置:</span>
+                <Input
+                  type="number"
+                  placeholder="横位置を入力"
+                  value={offsetData.x}
+                  onChange={(e) => {
+                    const newOffsetData = { ...offsetData, "x": Number(e.target.value) };
+                    setOffsetData(newOffsetData);
+                  }}
+                />
+              </div>
+              <br />
+              <div className={styles["select-container"]}
+              >
+                <span>縦位置:</span>
+                <Input
+                  type="number"
+                  placeholder="縦位置を入力"
+                  value={offsetData.y}
+                  onChange={(e) => {
+                    const newOffsetData = { ...offsetData, "y": Number(e.target.value) };
+                    setOffsetData(newOffsetData);
+                  }}
+                />
+              </div>
+              <br />
+              <div className={styles["select-container"]}
+              >
+                <span>文字間隔:</span>
+                <Input
+                  type="number"
+                  placeholder="文字間隔を入力"
+                  value={offsetData.spacing}
+                  onChange={(e) => {
+                    const newOffsetData = { ...offsetData, "spacing": Number(e.target.value) };
+                    setOffsetData(newOffsetData);
+                  }}
+                />
+              </div>
+              <br />
+
+              所属のフォントを選択:
+              <Select
+                value={fontName}
+                onChange={(e) => setFontName(e.target.value)}
+                displayEmpty
+                inputProps={{ 'aria-label': 'Without label' }}
+              >
+                {fontList.map((font, index) => (
+                  <MenuItem key={index} value={font}>
+                    <img src={`/font-preview/${font}.png`} alt={font} width="200" height="50"
+                      className={styles["font-preview"]}
+                    />
+                  </MenuItem>
+                ))}
+              </Select>
             </CardContent>
             <CardActions>
               <div
                 className={styles["button-container"]}
               >
-                <Button onClick={() => fetchData(queryData)}
+                <Button onClick={() => fetchData()}
                   disabled={faceImageBase64 === "" || isFetching}
                   variant='contained'
                   size='large'
@@ -215,7 +319,7 @@ export default function Page() {
             <div className={styles["result-container"]}
             >
               <img src={resultImageUrl} alt="Generated Image"
-                className={styles["generated-image"]}
+                className={clsx(styles["generated-image"], isFetching && styles["image-dark"])}
               />
               <a href={resultImageUrl} download="nijigasaki_card.png">
                 <Button variant="contained" color='success'
