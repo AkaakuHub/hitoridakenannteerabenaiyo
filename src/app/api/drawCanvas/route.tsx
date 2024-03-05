@@ -85,6 +85,7 @@ export async function POST(req: NextRequest) {
      */
     return new ImageResponse(
       (<>
+        {/* @ts-ignore */}
         <img src={cardImageArrayBuffer} width={2000} height={1272}
         />
         <div

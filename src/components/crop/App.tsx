@@ -92,6 +92,7 @@ const ImageCropper: FC<ImageCropperProps> = ({
         <Button
           color="primary"
           onClick={() =>
+            // @ts-ignore
             onComplete(cropImage(image, croppedAreaPixels ?? {}, console.log))
           }
         >
