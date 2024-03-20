@@ -36,6 +36,9 @@ const Footer: React.FC<Props> = ({
               現在{themeName}のテーマカラーで表示しています。
               <br />
               ヘッダーをクリックしてみてね！
+              <br />
+              <br />
+              <a href="https://github.com/AkaakuHub" target="_blank">Akaaku</a>&apos;s product
             </Typography>
           </Box>
         </Container>
