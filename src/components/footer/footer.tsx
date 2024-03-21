@@ -38,7 +38,7 @@ const Footer: React.FC<Props> = ({
               ヘッダーをクリックしてみてね！
               <br />
               <br />
-              <a href="https://github.com/AkaakuHub" target="_blank">Akaaku</a>&apos;s product
+              <a href="https://twitter.com/akaakuhub" target="_blank">Akaaku</a>&apos;s product
             </Typography>
           </Box>
         </Container>
