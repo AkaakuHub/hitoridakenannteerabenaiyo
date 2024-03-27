@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+import { GoogleAnalytics } from '@next/third-parties/google';
+
 const siteName: string = "虹ヶ咲学園 学生証ジェネレーター";
 const description: string = "虹ヶ咲学園の学生証風の画像を作成することができるサイトです。";
 const url: string = process.env.NEXT_PUBLIC_BASE_URL || "";
 const googleSearchConsole: string = process.env.NEXT_PUBLIC_GOOGLE_SEARCH_CONSOLE || "";
+
+const googleAnalyticsId: string = process.env.NEXT_PUBLIC_GA_ID || "";
 
 export const metadata: Metadata = {
   metadataBase: new URL(url),
@@ -57,6 +61,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <head>
+        <GoogleAnalytics gaId={googleAnalyticsId} />
+      </head>
       <body>
         {children}
       </body>

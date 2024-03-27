@@ -154,11 +154,11 @@ export default function Page() {
           maxHeight: "6em",
           borderRadius: 5,
         }}>
-          <div
+          <p
             className={styles["description"]}
           >
-            虹ヶ咲学園の学生証&quot;風&quot;の画像を生成します。
-          </div>
+            虹ヶ咲学園の学生証風の画像を生成します。
+          </p>
         </Card>
         <div className={styles["workspace-container"]}
         >
@@ -240,8 +240,9 @@ export default function Page() {
                     setOffsetData={setOffsetData}
                   />
                 </div>
-
-                所属のフォントを選択:
+                <p>
+                  所属のフォントを選択:
+                </p>
                 <Select
                   value={fontName}
                   onChange={(e) => setFontName(e.target.value)}
@@ -259,7 +260,7 @@ export default function Page() {
               </CardContent>
               {
                 faceImageBase64 === "" && (
-                  <div>まず、アイコン画像を選択してください。</div>
+                  <p>まず、アイコン画像を選択してください。</p>
                 )
               }
               <CardActions>
@@ -272,7 +273,10 @@ export default function Page() {
                     size='large'
                   >
                     <PlayArrowIcon />
-                    画像を作成</Button>
+                    <p>
+                      画像を作成
+                    </p>
+                  </Button>
                   {isFetching ?
                     <Box sx={{ display: 'flex' }} className={styles["loading-icon-container"]}
                     >
