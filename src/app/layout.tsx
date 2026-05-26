@@ -5,13 +5,13 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 
 const siteName: string = "虹ヶ咲学園 学生証ジェネレーター";
 const description: string = "虹ヶ咲学園の学生証風の画像を作成することができるサイトです。";
-const url: string = process.env.NEXT_PUBLIC_BASE_URL || "";
+const url: string | undefined = process.env.NEXT_PUBLIC_BASE_URL;
 const googleSearchConsole: string = process.env.NEXT_PUBLIC_GOOGLE_SEARCH_CONSOLE || "";
 
 const googleAnalyticsId: string = process.env.NEXT_PUBLIC_GA_ID || "";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(url),
+  metadataBase: url ? new URL(url) : undefined,
   title: siteName,
   description,
   keywords: ["ニジガク", "ロゴジェネ", "ロゴジェネレーター", "虹ヶ咲学園スクールアイドル同好会", "学生証"],
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: `${url}/ogp_default.png`,
+        url: url ? `${url}/ogp_default.png` : "/ogp_default.png",
         width: 1200,
         height: 630,
         alt: "虹ヶ咲学園学生証ジェネレーター",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     description,
     images: [
       {
-        url: `${url}/ogp_default.png`,
+        url: url ? `${url}/ogp_default.png` : "/ogp_default.png",
         width: 1200,
         height: 630,
         alt: "虹ヶ咲学園学生証ジェネレーター",
